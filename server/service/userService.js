@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 
 
 exports.saveUser = async (req, res) => {
+    console.log(req.body);
     const user = req.body
     if (user.nome === undefined || user.email === undefined || user.senha === undefined) {
         return res.status(400).send({ mensagem: "Dados invalidos" })
@@ -32,6 +33,7 @@ exports.saveUser = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    console.log(req.body);
     const user = await userData.getUserEmail(req.body.email)
     if (user) {
         bcrypt.compare(req.body.senha, user.senha, (error, result) => {
