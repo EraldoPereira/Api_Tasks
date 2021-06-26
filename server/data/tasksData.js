@@ -21,3 +21,11 @@ exports.updateTask = function( id_task, task ){
 exports.deleteTask = function(id_task){
     return database.none('DELETE FROM tasks WHERE id_task = $1', [id_task]).catch(error => { return { mensagem: error } })
 }
+
+exports.getTasksForDate = function(data_estimada){
+    return database.query('SELECT * FROM tasks WHERE data_estimada <= $1 ORDER BY data_estimada ASC', [data_estimada]).catch(error => { return { mensagem: error } })
+}
+
+exports.toggleTask = function(id_task, status){
+    return database.oneOrNone('UPDATE tasks SET status = $1 WHERE id_task = $2', [status, id_task]).catch(error => { return { mensagem: error } })
+}

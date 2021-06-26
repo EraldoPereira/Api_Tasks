@@ -2,6 +2,7 @@ const tasksData = require('../data/tasksData');
 const dateFormat = require('../help/dateFormat')
 
 exports.saveTask = async function (req, res) {
+    console.log(req.body);
     const task = req.body
     task.criado_em = dateFormat.dateFormat(new Date(), 'Y-m-d h:i:s')
     task.atualizado_em = dateFormat.dateFormat(new Date(), 'Y-m-d h:i:s')
@@ -68,4 +69,27 @@ exports.deleteTask = async function (req, res) {
     } else {
         return res.status(200).send({ mensagem: "Não encontrado" })
     }
+}
+
+exports.getTasksForDate = async function (req, res) {
+    const data = req.query.data + ' 23:59:00'
+    console.log(data);
+    const response = await tasksData.getTasksForDate(data);
+    return res.status(200).json(response)
+}
+
+exports.toggleTask = async function(req, res){
+    const response = await tasksData.getTask(req.params.id)
+    if(response){
+        if(response.status){
+            await tasksData.toggleTask(response.id_task, false)
+        }else{
+            await tasksData.toggleTask(response.id_task, true)
+        }
+        return res.status(200).end()
+    }else{
+        return res.status(400).send({ mensagem: "Não encontrado" })
+    }
+    
+    
 }
